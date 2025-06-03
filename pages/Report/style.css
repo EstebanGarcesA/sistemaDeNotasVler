@@ -1,0 +1,11 @@
+/* Tabla */
+
+.asignaturas{
+    width: 100%;
+    height: 50vh;
+}
+
+.asignaturas tr td a {
+    text-decoration: none;
+    color: black;
+}
