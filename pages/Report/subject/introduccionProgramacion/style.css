@@ -1,0 +1,15 @@
+/* table {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid black !important;
+    padding: 8px;
+  } */
+
+.introProgramacion{
+    width: 60%;
+    height: 50vh;
+    font-size: 1.4rem;
+    
+}
