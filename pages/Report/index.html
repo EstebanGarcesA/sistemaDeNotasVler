@@ -50,7 +50,7 @@
                                     <li><a class="dropdown-item" href="#">Mi horario</a></li>
                                     <li><a class="dropdown-item" href="#">Mis planes</a></li>
                                 </ul>
-                                
+
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -61,7 +61,7 @@
                                     <li><a class="dropdown-item" href="#">Cita de inscripción y cancelación</a></li>
                                     <li><a class="dropdown-item" href="#">Asignaturas disponibles para cursar</a></li>
                                 </ul>
-                                
+
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -73,7 +73,7 @@
                                     <li><a class="dropdown-item" href="#">Explorador de cursos</a></li>
                                     <li><a class="dropdown-item" href="#">Contenido de asignaturas</a></li>
                                 </ul>
-                                
+
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -83,7 +83,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#">Ayuda pagos en linea</a></li>
                                 </ul>
-                                
+
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -94,7 +94,7 @@
                                     <li><a class="dropdown-item" href="#">Mis solicitudes</a></li>
                                     <li><a class="dropdown-item" href="#">Descargar certificados</a></li>
                                 </ul>
-                                
+
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -103,9 +103,9 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#">Evalaución docente</a></li>
-                                    
+
                                 </ul>
-                                
+
                             </li>
                         </ul>
                     </div>
@@ -128,33 +128,122 @@
                 <p class="text-center fs-3 fw-bold my-5 py-5">
                     Mis calificaciones
                 </p>
-            </div> <hr>
+            </div>
+            <hr>
             <div class="col-12 d-flex justify-content-center">
-                <table class="asignaturas">
-                    <tr>
-                        <th>Técnico Laboral en Asistente en Desarrollo de Software</th>
-                    </tr>
-                    <tr>
-                        <td><a href="./subject/introduccionProgramacion/index.html">Introducción a la Programación</a></td>
-                        <td>En proceso</td>
-                    </tr>
-                    <tr>
-                        <td><a href="./subject/logicaProgramacion/index.html">Lógica de Programación</a></td>
-                        <td>En proceso</td>
-                    </tr>
-                    <tr>
-                        <td><a href="./subject/metodologiasAgilesProgramación/index.html">Metodologías Ágiles para la Programación</a></td>
-                        <td>En proceso</td>
-                    </tr>
+                <table class="asignaturas table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Técnico Laboral en Asistente en Desarrollo de Software</th>
+                            <th>Estado</th>
+                            <th>Calificación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="./subject/introduccionProgramacion/index.html">Introducción a la Programación</a></td>
+                            <td class="status">Aprobada</td>
+                            <td class="grade">4.0</td>
+                        </tr>
+                        <tr>
+                            <td><a href="./subject/logicaProgramacion/index.html">Lógica de Programación</a></td>
+                            <td class="status">Aprobada</td>
+                            <td class="grade">3.7</td>
+                        </tr>
+                        <tr>
+                            <td><a href="./subject/metodologiasAgilesProgramación/index.html">Metodologías Ágiles para la Programación</a></td>
+                            <td class="status">Aprobada</td>
+                            <td class="grade">4.2</td>
+                        </tr>
+                    </tbody>
                 </table>
+            </div>
+            <div class="col-12 text-center my-3">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gradeReportModal" onclick="generateGradeReport()">
+                    Generar boletín de notas
+                </button>
             </div>
         </div>
     </main>
+
+    <div class="modal fade" id="gradeReportModal" tabindex="-1" aria-labelledby="gradeReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gradeReportModalLabel">Boletín de Notas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="gradeReportContent">
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" id="downloadReportBtn">Descargar boletín (PDF)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateGradeReport() {
+            const table = document.querySelector('.asignaturas');
+            const rows = table.querySelectorAll('tbody tr');
+            let reportContent = '<h5>Reporte de Calificaciones</h5>';
+            reportContent += '<table class="table table-bordered">';
+            reportContent += '<thead><tr><th>Materia</th><th>Estado</th><th>Calificación</th></tr></thead><tbody>';
+
+            let totalGrades = 0;
+            let gradedSubjectsCount = 0;
+
+            rows.forEach(row => {
+                const subject = row.children[0].textContent;
+                const status = row.children[1].textContent;
+                const grade = row.children[2].textContent;
+
+                reportContent += `<tr><td>${subject}</td><td>${status}</td><td>${grade}</td></tr>`;
+
+                // Calcular el promedio solo para asignaturas con calificaciones numéricas
+                if (grade !== 'N/A' && !isNaN(parseFloat(grade))) {
+                    totalGrades += parseFloat(grade);
+                    gradedSubjectsCount++;
+                }
+            });
+
+            reportContent += '</tbody></table>';
+
+            if (gradedSubjectsCount > 0) {
+                const averageGrade = (totalGrades / gradedSubjectsCount).toFixed(2);
+                reportContent += `<p><strong>Promedio de calificaciones (materias cursadas):</strong> ${averageGrade}</p>`;
+            } else {
+                reportContent += `<p>No hay calificaciones numéricas registradas para calcular un promedio.</p>`;
+            }
+            
+
+            document.getElementById('gradeReportContent').innerHTML = reportContent;
+        }
+
+        document.getElementById('downloadReportBtn').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const reportContent = document.getElementById('gradeReportContent');
+            doc.html(reportContent, {
+                callback: function (doc) {
+                    doc.save('boletin_de_notas.pdf');
+                },
+                x: 10,
+                y: 10,
+                width: 190, // Ancho de la página
+                windowWidth: reportContent.offsetWidth // Ancho del contenido HTML
+            });
+        });
+    </script>
 
     <script src="../all.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
 </body>
 
 </html>
